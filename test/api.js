@@ -6,9 +6,9 @@ var request = require('supertest'),
 describe('You', function() {
 
   // should make this pass
-  it('should return true if Your face is batig nawng', function() {
+  it('should pass if Your face is batig nawng', function() {
     var You = {};
-    You.face = 'batig nawng';
+    You.face = 'gwapo';
     You.face.should.equal('batig nawng');
   });
 

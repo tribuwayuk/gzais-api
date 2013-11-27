@@ -2,6 +2,7 @@ var imodel = require('../models/item');
 var mongoose = require('mongoose');
 
 exports.ilist = function(req, res) {
+    var temp = '';
     imodel.itemModel.find(function(err, data) {
         res.writeHead(200, {
             'content-type': 'application/json'

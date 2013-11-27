@@ -5,7 +5,7 @@ exports.init = function () {
 
 	/** User Schema **/
 
-	var userSchema = mongoose.Schema({
+	var usersSchema = mongoose.Schema({
 		firstname: {
 			type: String,
 			required: true,
@@ -44,4 +44,8 @@ exports.init = function () {
 			type: String
 		}
 	});
+
+	mongoose.model('users', usersSchema);
+
+	return mongoose.models;
 };

@@ -1,6 +1,7 @@
 var http = require('http');
 var expect = require('chai').expect;
 var item = require('../routes/item');
+var test = require('../routes/test');
 var request = require('supertest');
 var app = require('../app');
 
@@ -10,7 +11,7 @@ describe('Item Route', function() {
     describe('#ilist', function() {
         it('List Items', function(done) {
             // Initialization: Delete items first before adding an item
-            item.ideleteTest();
+            test.ideleteTest();
 
             request(app)
                 .get('/items')
@@ -22,6 +23,7 @@ describe('Item Route', function() {
 
                     var items_length = JSON.parse(JSON.stringify(res.body)).length;
                     expect(items_length).to.be.above(0);
+                    
                     done();
                 });
         })
@@ -31,7 +33,7 @@ describe('Item Route', function() {
     describe('#iadd', function() {
         it('Add Item', function(done) {
             // Initialization: Delete items first before adding an item
-            item.ideleteTest();
+            test.ideleteTest();
 
             var body = {
                 item_name: "Test Item Name",
@@ -70,7 +72,7 @@ describe('Item Route', function() {
     describe('#idelete', function() {
         it('Delete item', function(done) {
             // Initialization: Add an item first before anything else
-            var new_item = item.iaddTest();
+            var new_item = test.iaddTest();
 
             request(app)
                 .del('/items/' + new_item._id)
@@ -84,6 +86,7 @@ describe('Item Route', function() {
                      * If res.body == {} meaning delete is failed
                      **/
                     expect(res.body).to.equal(1);
+
                     done();
                 });
         });
@@ -107,6 +110,7 @@ describe('Item Route', function() {
                      * its function.
                      **/
                     expect(res.body).to.have.property('_id')
+
                     done();
                 });
         })
@@ -132,13 +136,13 @@ describe('Item Route', function() {
                     if (err)
                         return done(err);
 
-                    /** 
+                    /**
                      * If the returned data is 1
                      * the function is successful in executing
                      * its function.
                      **/
                     expect(res.body).to.equal(1);
-                    
+
                     done();
                 });
         });

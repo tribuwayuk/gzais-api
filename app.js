@@ -8,8 +8,7 @@ var express = require('express'),
     user = require('./routes/user'),
     item = require('./routes/item'),
     http = require('http'),
-    path = require('path'),
-    requestify = require('requestify'); 
+    path = require('path'); 
 
 mongoose.connect('mongodb://localhost/ams');
 
@@ -42,14 +41,6 @@ app.get('/items/:id', item.iview);
 app.post('/items/add', item.iadd);
 app.put('/items/:id', item.iedit);
 app.delete('/items/:id', item.idelete);
-
-app.get('/test', function(req, res) {
-    requestify.get('http://localhost:3000/items').then(function(response) {
-        var data = response.body;
-        console.dir(data);
-    });
-    res.end('');
-});
 
 http.createServer(app).listen(app.get('port'), function() {
     console.log("Express server listening on port " + app.get('port'));

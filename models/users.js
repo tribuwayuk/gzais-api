@@ -20,6 +20,11 @@ exports.init = function () {
 			type: String,
 			required: true,
 			match: /^[\w]([\s]?){1,30}$/
+		},
+		address: {
+			type: String,
+			required: true,
+			match: /^([\w]([\.,]?)([\s]?)){1,30}$/
 		}
 	});
 };

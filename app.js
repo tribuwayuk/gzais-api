@@ -34,7 +34,7 @@ app.configure('development', function() {
 });
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/users', user.ulist);
 
 app.get('/items', item.ilist);
 app.get('/items/:id', item.iview);

@@ -63,7 +63,6 @@ exports.idelete = function(req, res) {
 }
 
 exports.iedit = function(req, res) {
-    console.log(req.params.id);
     imodel.itemModel.update({
         _id: req.params.id
     }, {
@@ -80,4 +79,26 @@ exports.iedit = function(req, res) {
             res.end(JSON.stringify(err));
         res.end(JSON.stringify(data));
     });
+}
+
+// All functions below are used only for testing
+exports.ideleteTest = function(req, res) {
+    imodel.itemModel.remove({
+        item_name: "Test Item Name"
+    }, function(err, data) {
+
+    });
+}
+
+exports.iaddTest = function(req, res) {
+    var itemObj = new imodel.itemModel({
+        item_name: 'Test Add Item Name',
+        item_type: 'Test Add Item Type',
+        item_desc: 'Test Add Item Description',
+        serial_num: 'Test Add Item Serial Number',
+        date_purchased: Date.now()
+    });
+
+    itemObj.save(function(err) {});
+    return itemObj;
 }

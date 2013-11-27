@@ -8,7 +8,7 @@ var express = require('express'),
     user = require('./routes/user'),
     item = require('./routes/item'),
     http = require('http'),
-    path = require('path'); 
+    path = require('path');
 
 mongoose.connect('mongodb://localhost/ams');
 

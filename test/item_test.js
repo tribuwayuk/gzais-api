@@ -6,17 +6,142 @@ var app = require('../app');
 
 describe('Item Route', function() {
 
+    // Test for listing items
     describe('#ilist', function() {
         it('List Items', function(done) {
+            // Initialization: Delete items first before adding an item
+            item.ideleteTest();
+
             request(app)
-                .get('/items/')
+                .get('/items')
                 .set('Accept', 'application/json')
-                .expect(200, '[{"__v":0,"_id":"529542428f62033702000001","item_desc":"Macbook","item_name":"MacBookPro","item_type":"Laptop","serial_num":"20131114-000001","date_purchased":"2013-11-27T00:52:18.751Z"}]')
+                .expect(200)
                 .end(function(err, res) {
-                    if (err) return done(err);
+                    if (err)
+                        return done(err);
+
+                    var items_length = JSON.parse(JSON.stringify(res.body)).length;
+                    expect(items_length).to.be.above(0);
                     done();
                 });
         })
-    })
+    });
+
+    // Test for adding item
+    describe('#iadd', function() {
+        it('Add Item', function(done) {
+            // Initialization: Delete items first before adding an item
+            item.ideleteTest();
+
+            var body = {
+                item_name: "Test Item Name",
+                item_type: "Test Item Type",
+                item_desc: "Test Item Description",
+                serial_num: "Test Item Serial Number",
+                date_purchased: Date.now()
+            };
+
+            request(app)
+                .post('/items/add')
+                .send(body)
+                .expect('Content-Type', /json/)
+                .end(function(err, res) {
+                    if (err)
+                        return done(err);
+
+
+                    // Get the data that has been saved in the database
+                    var item_name = JSON.parse(JSON.stringify(res.body)).item_name;
+                    var item_type = JSON.parse(JSON.stringify(res.body)).item_type;
+                    var item_desc = JSON.parse(JSON.stringify(res.body)).item_desc;
+                    var serial_num = JSON.parse(JSON.stringify(res.body)).serial_num;
+
+                    expect(item_name).to.equal("Test Item Name");
+                    expect(item_type).to.equal("Test Item Type");
+                    expect(item_desc).to.equal("Test Item Description");
+                    expect(serial_num).to.equal("Test Item Serial Number");
+
+                    done();
+                });
+        });
+    });
+
+    // Test for delete item
+    describe('#idelete', function() {
+        it('Delete item', function(done) {
+            // Initialization: Add an item first before anything else
+            var new_item = item.iaddTest();
+
+            request(app)
+                .del('/items/' + new_item._id)
+                .expect('Content-Type', /json/)
+                .end(function(err, res) {
+                    if (err)
+                        return done(err);
+
+                    /** 
+                     * If res.body == 1 meaning delete is successful
+                     * If res.body == {} meaning delete is failed
+                     **/
+                    expect(res.body).to.equal(1);
+                    done();
+                });
+        });
+    });
+
+    // Test for listing items
+    describe('#iview', function() {
+        it('View Item', function(done) {
+
+            request(app)
+                .get('/items/529542428f62033702000001')
+                .set('Accept', 'application/json')
+                .expect(200)
+                .end(function(err, res) {
+                    if (err)
+                        return done(err);
+
+                    /** 
+                     * If the returned data has an _id property
+                     * the function is successful in executing
+                     * its function.
+                     **/
+                    expect(res.body).to.have.property('_id')
+                    done();
+                });
+        })
+    });
+
+    // Test for listing items
+    describe('#iedit', function() {
+        it('Edit Item', function(done) {
+            var body = {
+                item_name: 'Mac Book Pro Retina',
+                item_type: 'Laptop',
+                item_desc: 'Macbook',
+                serial_num: '20131114-000001'
+            };
+
+            request(app)
+                .put('/items/529542428f62033702000001')
+                .send(body)
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .end(function(err, res) {
+                    if (err)
+                        return done(err);
+
+                    /** 
+                     * If the returned data is 1
+                     * the function is successful in executing
+                     * its function.
+                     **/
+                    expect(res.body).to.equal(1);
+                    
+                    done();
+                });
+        });
+    });
 
 });

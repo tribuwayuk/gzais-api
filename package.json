@@ -10,8 +10,7 @@
     "express": "3.1.0",
     "jade": "*",
     "mongoose": "~3.8.1",
-    "chai": "~1.8.1",
-    "requestify": "~0.1.16"
+    "chai": "~1.8.1"
   },
   "devDependencies": {
     "should": "~2.1.0",

@@ -34,6 +34,7 @@ app.configure('development', function() {
 });
 
 app.get('/', routes.index);
+
 app.get('/users', user.ulist);
 app.post('/users/add', user.uadd);
 

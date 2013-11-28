@@ -5,10 +5,6 @@ var request = require('supertest'),
 var userId = '';
 
 describe('User Route', function() {
-	describe('#uview', function() {
-
-	});
-
 	describe('#uadd', function() {
 		it('Add user', function(done) {
 			var body = {

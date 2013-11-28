@@ -38,7 +38,7 @@ var userSchema = mongoose.Schema({
 		type: String
 	},
 	dateemployed: {
-		type: String
+		type: Date
 	}
 });
 

@@ -59,25 +59,44 @@ exports.uadd = function(req, res) {
 	});
 };
 
+exports.udelete = function(req, res) {
+	umodel.userModel.remove({
+		_id: req.params.id
+	}, function(err, data) {
+		res.writeHead(200, {
+			'content-type': 'application/json'
+		});
 
+		if(err) {
+			res.end(JSON.stringify(err));
+		}
 
+		res.end(JSON.stringify(data));
+	});
+};
 
+exports.uedit = function(req, res) {
+	umodel.userModel.update({
+		_id: req.params.id
+	}, {
+		firstname: req.body.firstname,
+		middlename: req.body.middlename,
+		lastname: req.body.lastname,
+		email: req.body.email,
+		role: req.body.role,
+		address: req.body.address,
+		datebirth: req.body.datebirth,
+		gender: req.body.gender,
+		dateemployed: req.body.dateemployed
+	}, function(err, data) {
+		res.writeHead(200, {
+			'content-type': 'application/json'
+		});
 
+		if(err) {
+			res.end(JSON.stringify(err));
+		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		res.end(JSON.stringify(data));
+	});
+};

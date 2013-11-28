@@ -10,10 +10,10 @@ exports.ulist = function(req, res){
 		});
 
 		if(err) {
-			res.end(JSON.stringify(err));
+			return res.end(JSON.stringify(err));
 		}
 
-		res.end(JSON.stringify(data));
+		return res.end(JSON.stringify(data));
 	});
 };
 
@@ -26,10 +26,10 @@ exports.uview = function(req, res) {
 		});
 
 		if(err) {
-			res.end(JSON.stringify(err));
+			return res.end(JSON.stringify(err));
 		}
 
-		res.end(JSON.stringify(data));
+		return res.end(JSON.stringify(data));
 	});
 };
 
@@ -40,10 +40,13 @@ exports.uadd = function(req, res) {
 		lastname: req.body.lastname,
 		email: req.body.email,
 		role: req.body.role,
+		password: req.body.password,
+		confpassword: req.body.confpassword,
 		address: req.body.address,
 		datebirth: req.body.datebirth,
 		gender: req.body.gender,
-		dateemployed: req.body.dateemployed
+		dateemployed: req.body.dateemployed,
+		assets: req.body.assets
 	});
 
 	userObj.save(function(err) {
@@ -52,10 +55,10 @@ exports.uadd = function(req, res) {
 		});
 
 		if(err) {
-			res.end(JSON.stringify(err));
+			return res.end(JSON.stringify(err));
 		}
 
-		res.end(JSON.stringify(userObj));
+		return res.end(JSON.stringify(userObj));
 	});
 };
 
@@ -68,10 +71,10 @@ exports.udelete = function(req, res) {
 		});
 
 		if(err) {
-			res.end(JSON.stringify(err));
+			return res.end(JSON.stringify(err));
 		}
 
-		res.end(JSON.stringify(data));
+		return res.end(JSON.stringify(data));
 	});
 };
 
@@ -94,9 +97,9 @@ exports.uedit = function(req, res) {
 		});
 
 		if(err) {
-			res.end(JSON.stringify(err));
+			return res.end(JSON.stringify(err));
 		}
 
-		res.end(JSON.stringify(data));
+		return res.end(JSON.stringify(data));
 	});
 };

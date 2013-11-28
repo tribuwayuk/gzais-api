@@ -29,7 +29,7 @@ var userSchema = mongoose.Schema({
 	},
 	address: {
 		type: String,
-		match: /^([\w]([\.,]?)([\s]?)){1,60}$/
+		match: /^(?:\w+\.?,?\s?){1,60}$/
 	},
 	datebirth: {
 		type: Date

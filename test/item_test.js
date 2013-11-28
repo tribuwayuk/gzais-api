@@ -1,39 +1,16 @@
 var http = require('http');
 var expect = require('chai').expect;
 var item = require('../routes/item');
-var test = require('../routes/test');
 var request = require('supertest');
 var app = require('../app');
 
+var item_id = '';
+
 describe('Item Route', function() {
-
-    // Test for listing items
-    describe('#ilist', function() {
-        it('List Items', function(done) {
-            // Initialization: Delete items first before adding an item
-            test.ideleteTest();
-
-            request(app)
-                .get('/items')
-                .set('Accept', 'application/json')
-                .expect(200)
-                .end(function(err, res) {
-                    if (err)
-                        return done(err);
-
-                    var items_length = JSON.parse(JSON.stringify(res.body)).length;
-                    expect(items_length).to.be.above(0);
-                    
-                    done();
-                });
-        })
-    });
 
     // Test for adding item
     describe('#iadd', function() {
         it('Add Item', function(done) {
-            // Initialization: Delete items first before adding an item
-            test.ideleteTest();
 
             var body = {
                 item_name: "Test Item Name",
@@ -53,6 +30,7 @@ describe('Item Route', function() {
 
 
                     // Get the data that has been saved in the database
+                    item_id = JSON.parse(JSON.stringify(res.body))._id;
                     var item_name = JSON.parse(JSON.stringify(res.body)).item_name;
                     var item_type = JSON.parse(JSON.stringify(res.body)).item_type;
                     var item_desc = JSON.parse(JSON.stringify(res.body)).item_desc;
@@ -68,36 +46,12 @@ describe('Item Route', function() {
         });
     });
 
-    // Test for delete item
-    describe('#idelete', function() {
-        it('Delete item', function(done) {
-            // Initialization: Add an item first before anything else
-            var new_item = test.iaddTest();
-
-            request(app)
-                .del('/items/' + new_item._id)
-                .expect('Content-Type', /json/)
-                .end(function(err, res) {
-                    if (err)
-                        return done(err);
-
-                    /** 
-                     * If res.body == 1 meaning delete is successful
-                     * If res.body == {} meaning delete is failed
-                     **/
-                    expect(res.body).to.equal(1);
-
-                    done();
-                });
-        });
-    });
-
     // Test for listing items
     describe('#iview', function() {
         it('View Item', function(done) {
 
             request(app)
-                .get('/items/529542428f62033702000001')
+                .get('/items/' + item_id)
                 .set('Accept', 'application/json')
                 .expect(200)
                 .end(function(err, res) {
@@ -111,6 +65,26 @@ describe('Item Route', function() {
                      **/
                     expect(res.body).to.have.property('_id')
 
+                    done();
+                });
+        });
+    });
+
+    // Test for listing items
+    describe('#ilist', function() {
+        it('List Items', function(done) {
+
+            request(app)
+                .get('/items')
+                .set('Accept', 'application/json')
+                .expect(200)
+                .end(function(err, res) {
+                    if (err)
+                        return done(err);
+
+                    var items_length = JSON.parse(JSON.stringify(res.body)).length;
+                    expect(items_length).to.be.above(0);
+                    
                     done();
                 });
         })
@@ -127,7 +101,7 @@ describe('Item Route', function() {
             };
 
             request(app)
-                .put('/items/529542428f62033702000001')
+                .put('/items/' + item_id)
                 .send(body)
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
@@ -148,4 +122,26 @@ describe('Item Route', function() {
         });
     });
 
-});
+    // Test for delete item
+    describe('#idelete', function() {
+        it('Delete item', function(done) {
+
+            request(app)
+                .del('/items/' + item_id)
+                .expect('Content-Type', /json/)
+                .end(function(err, res) {
+                    if (err)
+                        return done(err);
+
+                    /** 
+                     * If res.body == 1 meaning delete is successful
+                     * If res.body == {} meaning delete is failed
+                     **/
+                    expect(res.body).to.equal(1);
+
+                    done();
+                });
+        });
+    });
+
+}); // end describe

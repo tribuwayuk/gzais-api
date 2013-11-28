@@ -27,6 +27,16 @@ var userSchema = mongoose.Schema({
 		type: String,
 		required: true
 	},
+	password: {
+		type: String,
+		required: true,
+		match: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
+	},
+	confpassword: {
+		type: String,
+		required: true,
+		match: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
+	},
 	address: {
 		type: String,
 		match: /^(?:\w+\.?,?\s?){1,60}$/
@@ -39,6 +49,9 @@ var userSchema = mongoose.Schema({
 	},
 	dateemployed: {
 		type: Date
+	},
+	assets: {
+		type: Array
 	}
 });
 

@@ -6,17 +6,17 @@ var userSchema = mongoose.Schema({
 	firstname: {
 		type: String,
 		required: true,
-		match: /^[\w]([\s]?){1,30}$/
+		// match: /^[\w]([\s]*){1,30}$/
 	},
 	middlename: {
 		type: String,
 		required: true,
-		match: /^[\w]([\s]?){1,30}$/
+		// match: /^[\w]([\s]*){1,30}$/
 	},
 	lastname: {
 		type: String,
 		required: true,
-		match: /^[\w]([\s]?){1,30}$/
+		// match: /^[\w]([\s]*){1,30}$/
 	},
 	email: {
 		type: String,
@@ -42,13 +42,13 @@ var userSchema = mongoose.Schema({
 		match: /^(?:\w+\.?,?\s?){1,60}$/
 	},
 	datebirth: {
-		type: Date
+		default: Date
 	},
 	gender: {
 		type: String
 	},
 	dateemployed: {
-		type: Date
+		default: Date
 	},
 	assets: {
 		type: Array

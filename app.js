@@ -36,7 +36,10 @@ app.configure('development', function() {
 app.get('/', routes.index);
 
 app.get('/users', user.ulist);
+app.get('/users/:id', user.uview);
 app.post('/users/add', user.uadd);
+app.put('/users/:id', user.uedit);
+app.delete('/users/:id', user.udelete);
 
 app.get('/items', item.ilist);
 app.get('/items/:id', item.iview);

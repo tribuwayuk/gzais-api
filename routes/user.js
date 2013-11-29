@@ -6,7 +6,7 @@ exports.ulist = function(req, res){
 
 	umodel.userModel.find(function(err, data) {
 		res.writeHead(200, {
-			'content-type': 'application/json'
+			'Content-Type': 'application/json'
 		});
 
 		if(err) {
@@ -22,7 +22,7 @@ exports.uview = function(req, res) {
 		_id: req.params.id
 	}, function(err, data) {
 		res.writeHead(200, {
-			'content-type': 'application/json'
+			'Content-Type': 'application/json'
 		});
 
 		if(err) {
@@ -51,7 +51,7 @@ exports.uadd = function(req, res) {
 
 	userObj.save(function(err) {
 		res.writeHead(200, {
-			'content-type': 'application/json'
+			'Content-Type': 'application/json'
 		});
 
 		if(err) {
@@ -67,7 +67,7 @@ exports.udelete = function(req, res) {
 		_id: req.params.id
 	}, function(err, data) {
 		res.writeHead(200, {
-			'content-type': 'application/json'
+			'Content-Type': 'application/json'
 		});
 
 		if(err) {
@@ -93,7 +93,7 @@ exports.uedit = function(req, res) {
 		dateemployed: req.body.dateemployed
 	}, function(err, data) {
 		res.writeHead(200, {
-			'content-type': 'application/json'
+			'Content-Type': 'application/json'
 		});
 
 		if(err) {

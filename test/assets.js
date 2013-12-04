@@ -1,6 +1,6 @@
 var http = require('http');
 var expect = require('chai').expect;
-var item = require('../routes/item');
+var item = require('../routes/asset');
 var request = require('supertest');
 var app = require('../app');
 

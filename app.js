@@ -5,8 +5,8 @@
 var express = require('express'),
     mongoose = require('mongoose'),
     routes = require('./routes'),
-    user = require('./routes/user'),
-    item = require('./routes/item'),
+    employee = require('./routes/employee'),
+    asset = require('./routes/asset'),
     http = require('http'),
     path = require('path');
 
@@ -25,6 +25,16 @@ app.configure(function() {
     app.use(express.methodOverride());
     app.use(express.cookieParser('your secret here'));
     app.use(express.session());
+    app.use(function (req, res, next) {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      if (req.method === 'OPTIONS') {
+        return res.end();
+      }
+      res.setHeader('Content-Type', 'application/json');
+      next();
+    });
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
 });
@@ -35,17 +45,17 @@ app.configure('development', function() {
 
 app.get('/', routes.index);
 
-app.get('/users', user.ulist);
-app.get('/users/:id', user.uview);
-app.post('/users/add', user.uadd);
-app.put('/users/:id', user.uedit);
-app.delete('/users/:id', user.udelete);
+app.get('/employees', employee.get);
+app.get('/employees/:id', employee.getId);
+app.post('/employees', employee.post);
+app.put('/employees/:id', employee.put);
+app.del('/employees/:id', employee.del);
 
-app.get('/items', item.ilist);
-app.get('/items/:id', item.iview);
-app.post('/items/add', item.iadd);
-app.put('/items/:id', item.iedit);
-app.delete('/items/:id', item.idelete);
+app.get('/assets', asset.get);
+app.get('/assets/:id', asset.getId);
+app.post('/assets', asset.post);
+app.put('/assets/:id', asset.put);
+app.del('/assets/:id', asset.del);
 
 http.createServer(app).listen(app.get('port'), function() {
     console.log("Express server listening on port " + app.get('port'));

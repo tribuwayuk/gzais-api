@@ -8,9 +8,10 @@ var express = require('express'),
     employee = require('./routes/employee'),
     asset = require('./routes/asset'),
     http = require('http'),
-    path = require('path');
+    path = require('path'),
+    dbURI = process.env.MONGOHQ_URL || 'mongodb://localhost/ams';
 
-mongoose.connect('mongodb://localhost/ams');
+mongoose.connect(dbURI);
 
 var app = express();
 module.exports = app;

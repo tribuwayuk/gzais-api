@@ -57,15 +57,23 @@ exports.del = function(req, res) {
 
 exports.put = function(req, res) {
 
-  model.Employee.update({
-    _id: req.params.id
-  }, req.body, function(err, data) {
+  var newData = {
+    first_name: req.body.first_name,
+    middle_name: req.body.middle_name,
+    last_name: req.body.last_name,
+    address: req.body.address,
+    email: req.body.email,
+    gender: req.body.gender,
+    date_employed: req.body.date_employed,
+    user_role: req.body.user_role,
+    password: req.body.password
+  };
+  
+  model.Employee.update({ _id: req.params.id  }, newData, function(err, data) {
 
     if (err) {
-      return res.end(JSON.stringify(err));
+      return res.end(JSON.stringify(req.body) + ' ' + JSON.stringify(err));
     }
-
     res.end(JSON.stringify(data));
-
   });
 };

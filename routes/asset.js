@@ -47,20 +47,10 @@ exports.del = function(req, res) {
 }
 
 exports.put = function(req, res) {
-    var data = {
-	asset_name: req.body.asset_name,
-	asset_type: req.body.asset_type,
-	asset_description: req.body.asset_description,
-	date_purchased: req.body.date_purchased,
-	status: req.body.status,
-	serial_number: req.body.serial_number,
-	supplier: req.body.supplier,
-	reason: req.body.reason
-    };
-
+    delete req.body._id;
     model.Asset.update({
 	_id: req.params.id
-    }, data, function(err, data) {
+    }, req.body, function(err, data) {
 	if (err) {
 	    console.log(err);
 	    res.end(JSON.stringify(err));

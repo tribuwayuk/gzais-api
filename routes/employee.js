@@ -103,8 +103,10 @@ exports.resetPassword = function(req, res) {
 
         mailer.sendOne(data['email'], messageOptions);
 
-        return res.end ( 'Successfully reset password! ' + newPassword.password );
+	return res.end ( 'Successfully reset password! ');
       });
+    } else {
+      return res.end ( "Can not find Employee Records.");
     }
 
   });

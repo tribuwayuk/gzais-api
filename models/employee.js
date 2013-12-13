@@ -5,20 +5,23 @@ Schema = mongoose.Schema;
 var EmployeeSchema = new Schema({
   first_name: {
     type: String,
-    required: true
+    required: true,
+    match: /^[a-zA-Z\s]{1,30}$/
   },
   middle_name: {
     type: String,
-    required: true
+    required: true,
+    match: /^[a-zA-Z\s]{1,30}$/
   },
   last_name: {
     type: String,
-    required: true
+    required: true,
+    match: /^[a-zA-Z\s]{1,30}$/
   },
   email: {
     type: String,
     required: true,
-    match: /^[a-z0-9._%-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+    match: /^[a-z]+\.[a-z]+@globalzeal\.net$/,
     unique: true
   },
   user_role: {
@@ -29,24 +32,26 @@ var EmployeeSchema = new Schema({
   password: {
     type: String,
     required: true,
-    // Password be atleast 6 characters long
     match: /^.{6,}$/
   },
   address: {
     type: String,
     require: true,
+    match: /^.{2,60}$/
   },
   date_of_birth: {
     type: Date,
-    default: Date.now
+    match: /^\d{2}\/\d{2}\/\d{4}$/
   },
   gender: {
     type: String,
-    required: true
+    required: true,
+    match: /^(male|female)$/
   },
   date_employed: {
     type: Date,
-    required: true
+    required: true,
+    match: /^\d{2}\/\d{2}\/\d{4}$/
   },
   assets: [{
     type: Schema.Types.ObjectId,

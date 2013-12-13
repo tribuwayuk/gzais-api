@@ -47,6 +47,7 @@ app.configure('development', function() {
 app.get('/', routes.index);
 
 app.post('/resetPassword/:id', employee.resetPassword);
+app.post('/forgotPassword/:email', employee.resetPassword);
 
 app.get('/employees', employee.get);
 app.get('/employees/:id', employee.getId);

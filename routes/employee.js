@@ -125,28 +125,24 @@ exports.resetPassword = function( req, res ) {
 
         }
 
-        model.Employee.update( reqParam, newPassword, function( err ) {
+        data.password = newPassword.password;
 
-            if ( err ) {
+        data.save(function (err) {
+			if (err) return res.end( JSON.stringify( err ) );
 
-                return res.end( JSON.stringify( err ) );
+			var msgTemplate    = mailer.messageResetPassword( data );
+			var msgSubject     = reqParam._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";
+			var messageOptions = {
+				subject              : msgSubject,
+				generateTextFromHTML : true,
+				html                 : msgTemplate
+			};
 
-            }
+			mailer.sendOne( data.email, messageOptions );
+			res.end(data);
+		});
 
-            data.password = newPassword.password;
-            
-            var msgTemplate    = mailer.messageResetPassword( data );
-            var msgSubject     = reqParam._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";
-            var messageOptions = {
-                subject              : msgSubject,
-                generateTextFromHTML : true,
-                html                 : msgTemplate
-            };
-
-            mailer.sendOne( data.email, messageOptions );
-            return res.end( 'ok' );
-
-        });
+        return res.end( 'ok' );
     });
 };
 

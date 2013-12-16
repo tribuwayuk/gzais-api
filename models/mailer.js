@@ -5,7 +5,7 @@ exports.messageResetPassword = function(data) {
     var msgline = "<br/>--------------------------------------------------------------------<br/>";
     var msgGreetings = "Hi " + data.first_name + ' ' + data.last_name + ",<br/><br/>";
     var msgSuccess = "Your password has just been reset.";
-    var msgBody = msgSuccess + "<br/>Your new login password: <b>" + data.pasword + "</b><br/><br/><br/>";
+    var msgBody = msgSuccess + "<br/>Your new login password: <b>" + data.password + "</b><br/><br/><br/>";
     var msgFooter = "Thank you,<br/><br/>GZAIS Support Team<br/><br/>" + msgline + "<small>This is a system-generated email: Please do not reply.</small>";
 
     var msgTemplate = msgGreetings + msgBody + msgFooter;

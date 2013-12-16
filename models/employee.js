@@ -32,7 +32,7 @@ var EmployeeSchema = new Schema({
     password: {
         type: String,
         required: true,
-        match: /^.{6,}$/
+        //match: /^.{6,}$/
     },
     address: {
         type: String,

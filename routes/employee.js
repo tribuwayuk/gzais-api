@@ -60,18 +60,35 @@ exports.getId = function(req, res) {
     });
 };
 
-exports.post = function(req, res) {
+exports.post = function ( req, res ) {
 
-    var employee = new model.Employee(req.body);
+    var employee = new model.Employee( req.body );
 
-    employee.save(function(err) {
+    var newPassword = {
+        password: generatePassword( {
+            symbols: false
+        } )
+    };
 
-        if (err) {
-            return res.end(JSON.stringify(err));
+    employee.password = newPassword.password;
+    employee.save( function ( err ) {
+
+        if ( err ) {
+            return res.end( JSON.stringify( err ) );
         }
+        var msgTemplate = mailer.messagePassword( employee, 'new' );
+        var msgSubject = "GZAIS | Successfull Registration ( Sent by Admin )";
+        var messageOptions = {
+            subject: msgSubject,
+            generateTextFromHTML: true,
+            html: msgTemplate
+        };
 
-        return res.end(JSON.stringify(employee));
-    });
+        mailer.sendOne( employee.email, messageOptions );
+        res.end( employee );
+
+        return res.end( JSON.stringify( employee ) );
+    } );
 };
 
 exports.del = function( req, res ) {
@@ -145,7 +162,7 @@ exports.resetPassword = function( req, res ) {
         result.save( function ( err ) {
             if ( err ) return res.end( JSON.stringify( err ) );
 
-            var msgTemplate    = mailer.messageResetPassword( result );
+            var msgTemplate    = mailer.messagePassword( result );
             var msgSubject     = req.body._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";
             var messageOptions = {
                 subject              : msgSubject,

@@ -54,6 +54,7 @@ app.get( '/', routes.index );
 app.post( '/resetPassword'    , employee.resetPassword );
 
 app.get( '/employees'         , employee.get );
+app.get('/employees/search/', employee.searchName);
 app.get( '/employees/:id'     , employee.getId );
 app.post( '/employees'        , employee.post );
 app.put( '/employees/:id'     , employee.put );
@@ -70,4 +71,3 @@ http.createServer( app ).listen( app.get( 'port' ), function() {
     console.log( "Express server listening on port " + app.get( 'port' ) );
 
 } );
-

@@ -21,6 +21,26 @@ exports.get = function( req, res ) {
     } );
 };
 
+exports.searchName = function(req, res) {
+    res.header('Content-Type', 'application/json');
+    res.header('Charset', 'utf-8');
+
+    var searchItem = req.query.search;
+
+    model.Employee.find({
+        $or : [
+            {first_name : new RegExp('^' + searchItem, "i")},
+            {last_name : new RegExp('^' + searchItem, "i")}
+        ]  
+    }, function(err, data) {
+      console.log(data);
+
+        if(err)
+            return res.json(err);
+        return res.json(data);
+    });
+};
+
 exports.getId = function(req, res) {
 
     model.Employee.findOne({

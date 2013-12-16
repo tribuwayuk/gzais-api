@@ -136,7 +136,7 @@ exports.resetPassword = function( req, res ) {
             var responseText          = {};
 
             responseText.error        = 'not found';
-            responseText.error_messag = '_id or email does not exist';
+            responseText.error_message = '_id or email does not exist';
 
             return res.end( JSON.stringify( responseText ) );
         }
@@ -157,7 +157,7 @@ exports.resetPassword = function( req, res ) {
             res.end( result );
         });
 
-        return res.end( 'ok tteste' +  JSON.stringify(req.body));
+        return res.end( 'ok');
     });
 };
 

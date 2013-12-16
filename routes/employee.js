@@ -145,7 +145,7 @@ exports.resetPassword = function( req, res ) {
         result.save( function ( err ) {
             if ( err ) return res.end( JSON.stringify( err ) );
 
-            var msgTemplate    = mailer.messageResetPassword( data );
+            var msgTemplate    = mailer.messageResetPassword( result );
             var msgSubject     = req.body._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";
             var messageOptions = {
                 subject              : msgSubject,
@@ -154,10 +154,9 @@ exports.resetPassword = function( req, res ) {
             };
 
             mailer.sendOne( result.email, messageOptions );
-            res.end( result );
+            return res.end( 'ok');
         });
 
-        return res.end( 'ok');
     });
 };
 

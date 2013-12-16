@@ -99,8 +99,6 @@ exports.put = function( req, res ) {
 
 exports.resetPassword = function( req, res ) {
 
-    var reqParam = { };
-
     // Generate Password
     var newPassword = {
         password: generatePassword( {
@@ -108,45 +106,29 @@ exports.resetPassword = function( req, res ) {
         } )
     };
 
-    if ( req.params.id ) {
-
-        reqParam._id = req.params.id;
-
-    } else {
-
-        reqParam.email = req.params.email;
-
-    }
-
-    model.Employee.findOne( reqParam ).exec( function( err, data ) {
+    model.Employee.findOne( req.body ).exec( function( err, data ) {
         if ( err ) {
-
             return res.end( JSON.stringify( err ) );
-
         }
 
-        model.Employee.update( reqParam, newPassword, function( err ) {
+        data.password = newPassword.password;
 
-            if ( err ) {
+        data.save(function (err) {
+			if (err) return res.end( JSON.stringify( err ) );
 
-                return res.end( JSON.stringify( err ) );
+			var msgTemplate    = mailer.messageResetPassword( data );
+			var msgSubject     = req.body._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";
+			var messageOptions = {
+				subject              : msgSubject,
+				generateTextFromHTML : true,
+				html                 : msgTemplate
+			};
 
-            }
+			mailer.sendOne( data.email, messageOptions );
+			res.end(data);
+		});
 
-            data.password = newPassword.password;
-            
-            var msgTemplate    = mailer.messageResetPassword( data );
-            var msgSubject     = reqParam._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";
-            var messageOptions = {
-                subject              : msgSubject,
-                generateTextFromHTML : true,
-                html                 : msgTemplate
-            };
-
-            mailer.sendOne( data.email, messageOptions );
-            return res.end( 'ok' );
-
-        });
+        return res.end( 'ok tteste' +  JSON.stringify(req.body));
     });
 };
 

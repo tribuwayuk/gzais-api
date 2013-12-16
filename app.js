@@ -51,14 +51,13 @@ app.configure( 'development', function() {
 
 app.get( '/', routes.index );
 
-app.post( '/resetPassword/:id'    , employee.resetPassword );
-app.post( '/forgotPassword/:email', employee.resetPassword );
+app.post( '/resetPassword'    , employee.resetPassword );
 
-app.get( '/employees'    , employee.get );
-app.get( '/employees/:id', employee.getId );
-app.post( '/employees'   , employee.post );
-app.put( '/employees/:id', employee.put );
-app.del( '/employees/:id', employee.del );
+app.get( '/employees'         , employee.get );
+app.get( '/employees/:id'     , employee.getId );
+app.post( '/employees'        , employee.post );
+app.put( '/employees/:id'     , employee.put );
+app.del( '/employees/:id'     , employee.del );
 
 app.get( '/assets'    , asset.get );
 app.get( '/assets/:id', asset.getId );

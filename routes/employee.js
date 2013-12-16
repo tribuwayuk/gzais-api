@@ -154,7 +154,7 @@ exports.resetPassword = function( req, res ) {
             };
 
             mailer.sendOne( result.email, messageOptions );
-            return res.end( 'ok');
+            return res.end( { ok: 'ok' } );
         });
 
     });

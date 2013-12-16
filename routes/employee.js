@@ -126,15 +126,16 @@ exports.resetPassword = function( req, res ) {
         } )
     };
 
-    model.Employee.findOne( req.body ).exec( function( err, data ) {
+    model.Employee.findOne( req.body, function( err, result ) {
+
         if ( err ) {
             return res.end( JSON.stringify( err ) );
         }
 
-        data.password = newPassword.password;
+        result.password = newPassword.password;
 
-        data.save(function (err) {
-			if (err) return res.end( JSON.stringify( err ) );
+        result.save( function ( err ) {
+			if ( err ) return res.end( JSON.stringify( err ) );
 
 			var msgTemplate    = mailer.messageResetPassword( data );
 			var msgSubject     = req.body._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";
@@ -144,8 +145,8 @@ exports.resetPassword = function( req, res ) {
 				html                 : msgTemplate
 			};
 
-			mailer.sendOne( data.email, messageOptions );
-			res.end(data);
+			mailer.sendOne( result.email, messageOptions );
+			res.end( result );
 		});
 
         return res.end( 'ok tteste' +  JSON.stringify(req.body));

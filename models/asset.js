@@ -33,7 +33,7 @@ var AssetSchema = new Schema({
     supplier: {
         type: String,
         required: true,
-        match: /^[a-zA-Z0-9-\s]{5,160}$/
+        match: /^[a-zA-Z0-9\-\.\,\&\s]{5,160}$/
     },
     status: { 
         type: String,

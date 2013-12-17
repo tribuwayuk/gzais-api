@@ -4,6 +4,9 @@
 
 var express  = require( 'express' );
 var mongoose = require( 'mongoose' );
+	require( './models/asset');
+	require( './models/employee' );
+
 var routes   = require( './routes' );
 var employee = require( './routes/employee' );
 var asset    = require( './routes/asset' );
@@ -12,6 +15,7 @@ var path     = require( 'path' );
 var dbURI    = process.env.MONGOHQ_URL || 'mongodb://localhost/ams';
 
 mongoose.connect( dbURI );
+
 
 var app        = express();
 module.exports = app;

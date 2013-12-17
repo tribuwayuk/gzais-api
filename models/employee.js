@@ -59,4 +59,4 @@ var employeeSchema = new Schema({
     }]
 });
 
-module.exports.Employee = mongoose.model('Employee', employeeSchema).Employee;
+mongoose.model( 'Employee', employeeSchema );

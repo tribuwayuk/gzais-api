@@ -1,8 +1,8 @@
 'use strict';
 
-var Asset    = require( '../models/asset' );
-var Employee = require( '../models/employee' );
 var mongoose = require( 'mongoose' );
+var Asset    = mongoose.model( 'Asset' );
+var Employee = mongoose.model( 'Employee' );
 
 exports.get = function( req, res ) {
     var temp = '';

@@ -51,5 +51,4 @@ var assetSchema = new Schema({
     }
 });
 
-module.exports.Asset = mongoose.model('Asset', assetSchema).Asset;
-
+mongoose.model('Asset', assetSchema);

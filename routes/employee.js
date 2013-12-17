@@ -1,8 +1,8 @@
 'use strict';
 
-var Employee         = require( '../models/employee' );
 var mailer           = require( '../models/mailer' );
 var mongoose         = require( 'mongoose' );
+var Employee         = mongoose.model( 'Employee' );
 var generatePassword = require( 'randpass' );
 
 

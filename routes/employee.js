@@ -87,7 +87,7 @@ exports.post = function ( req, res ) {
         mailer.sendOne( employee.email, messageOptions );
         res.end( employee );
 
-        return res.end( JSON.stringify( employee ) );
+        return res.end( '{"ok": "New Employee is successfully added."}' );
     } );
 };
 
@@ -146,7 +146,7 @@ exports.resetPassword = function( req, res ) {
     model.Employee.findOne( req.body, function( err, result ) {
 
         if ( err ) {
-           return res.end( JSON.stringify( err ) ); 
+           return res.end( JSON.stringify( err ) );
         }
 
         if ( !result ) {
@@ -160,9 +160,11 @@ exports.resetPassword = function( req, res ) {
 
         result.password = newPassword.password;
         result.save( function ( err ) {
-            if ( err ) return res.end( JSON.stringify( err ) );
+            if ( err ) {
+				return res.end( JSON.stringify( err ) );
+            }
 
-            var msgTemplate    = mailer.messagePassword( result );
+            var msgTemplate    = mailer.messagePassword( result, req.body._id ? 'reset' : 'forgot');
             var msgSubject     = req.body._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";
             var messageOptions = {
                 subject              : msgSubject,

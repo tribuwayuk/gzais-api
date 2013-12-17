@@ -11,9 +11,7 @@ exports.get = function( req, res ) {
     model.Employee.find( function( err, data ) {
 
         if ( err ) {
-
             return res.end(JSON.stringify(err));
-
         }
 
         return res.end( JSON.stringify( data ) );
@@ -30,7 +28,7 @@ exports.searchName = function(req, res) {
     model.Employee.find({
         $or : [
             {first_name : new RegExp('^' + searchItem, "i")},
-            {last_name : new RegExp('^' + searchItem, "i")}
+            {last_name  : new RegExp('^' + searchItem, "i")}
         ]
     }, function(err, data) {
       console.log(data);
@@ -50,9 +48,7 @@ exports.getId = function(req, res) {
     }, function( err, data ) {
 
         if ( err ) {
-
             return res.end( JSON.stringify( err ) );
-
         }
 
         return res.end(JSON.stringify(data));

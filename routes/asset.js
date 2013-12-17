@@ -75,18 +75,15 @@ exports.put = function( req, res ) {
         }
 
         if ( req.body.assignee ) {
-
         	// update assigned employee's assets
             Employee.findByIdAndUpdate( req.body.assignee, {
                 $push : {
-                    assets: req.params._id
+                    assets: req.params.id
                 }
             }, function( err ) {
-
                 if ( err ) {
                     return res.end( JSON.stringify( err ) );
                 }
-
                 res.end( JSON.stringify( data ) );
             } );
 

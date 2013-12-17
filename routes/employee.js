@@ -1,64 +1,67 @@
 'use strict';
 
-var model            = require( '../models/employee' );
 var mailer           = require( '../models/mailer' );
 var mongoose         = require( 'mongoose' );
+var Employee         = mongoose.model( 'Employee' );
 var generatePassword = require( 'randpass' );
 
 
 exports.get = function( req, res ) {
 
-    model.Employee.find( function( err, data ) {
+    Employee.find( {} )
+        .populate( 'assets' )
+        .exec( function( err, data ) {
 
-        if ( err ) {
-            return res.end(JSON.stringify(err));
-        }
+            if ( err ) {
+                return res.end( JSON.stringify( err ) );
+            }
 
-        return res.end( JSON.stringify( data ) );
+            return res.end( JSON.stringify( data ) );
 
-    } );
+        } );
 };
 
-exports.searchName = function(req, res) {
-    res.header('Content-Type', 'application/json');
-    res.header('Charset', 'utf-8');
+exports.searchName = function( req, res ) {
+    res.header( 'Content-Type', 'application/json' );
+    res.header( 'Charset', 'utf-8' );
 
     var searchItem = req.query.search;
 
-    model.Employee.find({
-        $or : [
-            {first_name : new RegExp('^' + searchItem, "i")},
-            {last_name  : new RegExp('^' + searchItem, "i")}
-        ]
-    }, function(err, data) {
-      console.log(data);
-
-        if(err)
-            return res.json(err);
-        return res.json(data);
-    });
-};
-
-exports.getId = function(req, res) {
-
-    model.Employee.findOne({
-
-        _id: req.params.id
-
+    Employee.find( {
+        $or: [ {
+            first_name : new RegExp( '^' + searchItem, "i" )
+        }, {
+            last_name  : new RegExp( '^' + searchItem, "i" )
+        } ]
     }, function( err, data ) {
+        console.log( data );
 
-        if ( err ) {
-            return res.end( JSON.stringify( err ) );
-        }
-
-        return res.end(JSON.stringify(data));
-
-    });
+        if ( err )
+            return res.json( err );
+        return res.json( data );
+    } );
 };
 
-exports.post = function ( req, res ) {
+exports.getId = function( req, res ) {
 
-    var employee = new model.Employee( req.body );
+    Employee.findOne( {
+        _id: req.params.id
+    } )
+        .populate( 'assets' )
+        .exec( function( err, data ) {
+
+            if ( err ) {
+                return res.end( JSON.stringify( err ) );
+            }
+
+            return res.end( JSON.stringify( data ) );
+
+        } );
+};
+
+exports.post = function( req, res ) {
+
+    var employee = new Employee( req.body );
 
     var newPassword = {
         password: generatePassword( {
@@ -67,7 +70,7 @@ exports.post = function ( req, res ) {
     };
 
     employee.password = newPassword.password;
-    employee.save( function ( err ) {
+    employee.save( function( err ) {
 
         if ( err ) {
             return res.end( JSON.stringify( err ) );
@@ -87,7 +90,7 @@ exports.post = function ( req, res ) {
 
 exports.del = function( req, res ) {
 
-    model.Employee.remove( {
+    Employee.remove( {
 
         _id: req.params.id
 
@@ -95,7 +98,7 @@ exports.del = function( req, res ) {
 
         if ( err ) {
 
-            return res.end(JSON.stringify(err));
+            return res.end( JSON.stringify( err ) );
 
         }
 
@@ -110,7 +113,7 @@ exports.put = function( req, res ) {
 
     delete newData._id;
 
-    model.Employee.update( {
+    Employee.update( {
 
         _id: req.params.id
 
@@ -124,7 +127,7 @@ exports.put = function( req, res ) {
 
         res.end( JSON.stringify( data ) );
 
-    });
+    } );
 
 };
 
@@ -137,39 +140,38 @@ exports.resetPassword = function( req, res ) {
         } )
     };
 
-    model.Employee.findOne( req.body, function( err, result ) {
+    Employee.findOne( req.body, function( err, result ) {
 
         if ( err ) {
-           return res.end( JSON.stringify( err ) );
+            return res.end( JSON.stringify( err ) );
         }
 
         if ( !result ) {
-            var responseText          = {};
+            var responseText = {};
 
-            responseText.error        = 'not found';
+            responseText.error = 'not found';
             responseText.error_message = '_id or email does not exist';
 
             return res.end( JSON.stringify( responseText ) );
         }
 
         result.password = newPassword.password;
-        result.save( function ( err ) {
+        result.save( function( err ) {
             if ( err ) {
-				return res.end( JSON.stringify( err ) );
+                return res.end( JSON.stringify( err ) );
             }
 
-            var msgTemplate    = mailer.messagePassword( result, req.body._id ? 'reset' : 'forgot');
-            var msgSubject     = req.body._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";
+            var msgTemplate = mailer.messagePassword( result, req.body._id ? 'reset' : 'forgot' );
+            var msgSubject = req.body._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";
             var messageOptions = {
-                subject              : msgSubject,
-                generateTextFromHTML : true,
-                html                 : msgTemplate
+                subject: msgSubject,
+                generateTextFromHTML: true,
+                html: msgTemplate
             };
 
             mailer.sendOne( result.email, messageOptions );
             return res.end( '{ "ok" : "success" }' );
-        });
+        } );
 
-    });
+    } );
 };
-

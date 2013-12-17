@@ -112,6 +112,7 @@ exports.put = function( req, res ) {
     var newData = req.body;
 
     delete newData._id;
+    delete newData.assets;
 
     Employee.update( {
 

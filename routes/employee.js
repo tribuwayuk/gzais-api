@@ -22,8 +22,6 @@ exports.get = function( req, res ) {
 };
 
 exports.searchName = function( req, res ) {
-    res.header( 'Content-Type', 'application/json' );
-    res.header( 'Charset', 'utf-8' );
 
     var searchItem = req.query.search;
 

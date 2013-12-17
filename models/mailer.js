@@ -6,15 +6,24 @@ exports.messagePassword = function ( data, type ) {
     var msgGreetings = "Hi " + data.first_name + ' ' + data.last_name + ",<br/><br/>";
     var msgFooter = "Thank you,<br/><br/>GZAIS Support Team<br/><br/>" + msgline + "<small>This is a system-generated email: Please do not reply.</small>";
 
+    var msgSuccess, msgBody;
 
-    if ( type === 'new' ) {
-        var msgSuccess = "You Have been registered to Global Zeal Asset Inventory System.";
-        var msgBody = msgSuccess + "<br/> Your Email is: " + data.email + "<br/><br/>Your new password: <b>" + data.password + "<br/> <a href=http://gzais.herokuapp.com/>Log in Here </a>" + "</b><br/><br/><br/>";
-    } else {
-        var msgSuccess = "Your password has just been reset.";
-        var msgBody = msgSuccess + "<br/>Your new login password: <b>" + data.password + "</b><br/><br/><br/>";
-
+    switch (type)
+    {
+		case 'new':
+			msgSuccess = "You have been registered to Global Zeal Asset Inventory System.";
+			msgBody = msgSuccess + "<br/> Your Email is: " + data.email + "<br/><br/>Your new password: <b>" + data.password + "<br/> <a href=http://gzais.herokuapp.com/>Log in Here </a>" + "</b><br/><br/><br/>";
+			break;
+		case 'reset':
+			msgSuccess = "Your password has just been reset.";
+			msgBody = msgSuccess + "<br/>Your new login password: <b>" + data.password + "</b><br/><br/><br/>";
+			break;
+		case 'forgot':
+			msgSuccess = "We have received a report that you have forgot your password.";
+			msgBody = msgSuccess + "<br/>Your new login password: <b>" + data.password + "</b><br/><br/><br/>";
+			break;
     }
+    
     var msgTemplate = msgGreetings + msgBody + msgFooter;
     return msgTemplate;
 };

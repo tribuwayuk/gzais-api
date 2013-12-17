@@ -160,7 +160,9 @@ exports.resetPassword = function( req, res ) {
 
         result.password = newPassword.password;
         result.save( function ( err ) {
-            if ( err ) return res.end( JSON.stringify( err ) );
+            if ( err ) {
+				return res.end( JSON.stringify( err ) );
+            }
 
             var msgTemplate    = mailer.messagePassword( result, req.body._id ? 'reset' : 'forgot');
             var msgSubject     = req.body._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";

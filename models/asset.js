@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 /* Schema for user collection */
-var AssetSchema = new Schema({
+var assetSchema = new Schema({
     asset_name: {
         type: String,
         required: true,
@@ -35,7 +35,7 @@ var AssetSchema = new Schema({
         required: true,
         match: /^[a-zA-Z0-9\-\.\,\&\s]{5,160}$/
     },
-    status: { 
+    status: {
         type: String,
         required: true,
         match: /^(working|defective)$/
@@ -51,5 +51,5 @@ var AssetSchema = new Schema({
     }
 });
 
-module.exports.Asset = mongoose.model('Asset', AssetSchema);
+module.exports.Asset = mongoose.model('Asset', assetSchema).Asset;
 

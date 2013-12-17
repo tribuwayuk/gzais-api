@@ -31,7 +31,7 @@ exports.searchName = function(req, res) {
         $or : [
             {first_name : new RegExp('^' + searchItem, "i")},
             {last_name : new RegExp('^' + searchItem, "i")}
-        ]  
+        ]
     }, function(err, data) {
       console.log(data);
 
@@ -85,9 +85,7 @@ exports.post = function ( req, res ) {
         };
 
         mailer.sendOne( employee.email, messageOptions );
-        res.end( employee );
-
-        return res.end( '{"ok": "New Employee is successfully added."}' );
+        return res.end( JSON.stringify( employee ) );
     } );
 };
 

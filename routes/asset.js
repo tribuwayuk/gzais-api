@@ -76,36 +76,37 @@ exports.put = function( req, res ) {
         }
 
         if ( req.body.assignee ) {
+
             // update assigned employee's assets
             Employee.findByIdAndUpdate( req.body.assignee, {
                 $push: {
                     assets: req.params.id
                 }
-            }, function( employee ) {
+            }, function( err, employee ) {
 
-                if ( employee ) {
-
-	                /**
-	                * Notify the new assigned Employee
-	                **/
-	                var msgTemplate = mailer.messageTemplate( {
-	                    first_name    : employee.first_name,
-	                    last_name     : employee.last_name,
-	                    asset_id      : req.params.id,
-	                    asset_name    : req.body.asset_name,
-	                    serial_number : req.body.serial_number
-	                }, 'assign' );
-	                var msgSubject = "AIS: New Assigned Item";
-	                var messageOptions = {
-	                    subject              : msgSubject,
-	                    generateTextFromHTML : true,
-	                    html                 : msgTemplate
-	                };
-
-	                mailer.sendOne( employee.email, messageOptions );
-
-                    return res.end( JSON.stringify( err ) );
+                if ( err ) {
+	                return res.end( JSON.stringify( err ) );
                 }
+
+                /**
+                * Notify the new assigned Employee
+                **/
+                var msgTemplate = mailer.messageTemplate( {
+                    first_name    : employee.first_name,
+                    last_name     : employee.last_name,
+                    asset_id      : req.params.id,
+                    asset_name    : req.body.asset_name,
+                    serial_number : req.body.serial_number
+                }, 'assign' );
+                var msgSubject     = "AIS: New Assigned Item";
+                var messageOptions = {
+                    subject              : msgSubject,
+                    generateTextFromHTML : true,
+                    html                 : msgTemplate
+                };
+
+                mailer.sendOne( employee.email, messageOptions );
+                res.end( JSON.stringify( employee ) );
 
             } );
 

@@ -3,6 +3,7 @@
 var mongoose = require( 'mongoose' );
 var Asset    = mongoose.model( 'Asset' );
 var Employee = mongoose.model( 'Employee' );
+var mailer   = require( '../models/mailer' );
 
 exports.get = function( req, res ) {
     var temp = '';
@@ -61,7 +62,9 @@ exports.del = function( req, res ) {
 };
 
 exports.put = function( req, res ) {
-
+    var flag     = req.body.flag;
+    var assignee = req.body.assignee;
+    var asset_id = req.body._id;
     delete req.body._id;
 
     Asset.update( {
@@ -73,6 +76,30 @@ exports.put = function( req, res ) {
         if ( err ) {
             return res.end( JSON.stringify( err ) );
         }
+
+        Employee.findOne( { '_id' : assignee }, function( err, emp ) {
+            if ( err ) {
+                return res.end( JSON.stringify( err ) );
+            }
+
+            if(flag == 'assign') {
+                var msgTemplate    = mailer.messagePassword( {
+                                                                first_name    : emp.first_name,
+                                                                last_name     : emp.last_name,
+                                                                asset_id      : asset_id,
+                                                                asset_name    : req.body.asset_name,
+                                                                serial_number : req.body.serial_number
+                                                            }, 'assign' );
+                var msgSubject     = "AIS: New Assigned Item";
+                var messageOptions = {
+                    subject: msgSubject,
+                    generateTextFromHTML: true,
+                    html: msgTemplate
+                };
+
+                mailer.sendOne( emp.email, messageOptions );
+            }
+        });
 
         if ( req.body.assignee ) {
         	// update assigned employee's assets

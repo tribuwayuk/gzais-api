@@ -23,7 +23,7 @@ exports.get = function( req, res ) {
 exports.getId = function( req, res ) {
 
     Asset.findOne( {
-        _id : req.params.id
+        _id: req.params.id
     } )
         .populate( 'assignee' )
         .exec( function( err, data ) {
@@ -49,7 +49,7 @@ exports.post = function( req, res ) {
 exports.del = function( req, res ) {
     Asset.remove( {
 
-        _id : req.params.id
+        _id: req.params.id
 
     }, function( err, data ) {
 
@@ -62,14 +62,12 @@ exports.del = function( req, res ) {
 };
 
 exports.put = function( req, res ) {
-    var flag     = req.body.flag;
-    var assignee = req.body.assignee;
-    var asset_id = req.body._id;
+
     delete req.body._id;
 
     Asset.update( {
 
-        _id : req.params.id
+        _id: req.params.id
 
     }, req.body, function( err, data ) {
 
@@ -77,41 +75,38 @@ exports.put = function( req, res ) {
             return res.end( JSON.stringify( err ) );
         }
 
-        Employee.findOne( { '_id' : assignee }, function( err, emp ) {
-            if ( err ) {
-                return res.end( JSON.stringify( err ) );
-            }
-
-            if(flag == 'assign') {
-                var msgTemplate    = mailer.messagePassword( {
-                                                                first_name    : emp.first_name,
-                                                                last_name     : emp.last_name,
-                                                                asset_id      : asset_id,
-                                                                asset_name    : req.body.asset_name,
-                                                                serial_number : req.body.serial_number
-                                                            }, 'assign' );
-                var msgSubject     = "AIS: New Assigned Item";
-                var messageOptions = {
-                    subject: msgSubject,
-                    generateTextFromHTML: true,
-                    html: msgTemplate
-                };
-
-                mailer.sendOne( emp.email, messageOptions );
-            }
-        });
-
         if ( req.body.assignee ) {
-        	// update assigned employee's assets
+            // update assigned employee's assets
             Employee.findByIdAndUpdate( req.body.assignee, {
-                $push : {
+                $push: {
                     assets: req.params.id
                 }
-            }, function( err ) {
-                if ( err ) {
+            }, function( employee ) {
+
+                if ( employee ) {
+
+	                /**
+	                * Notify the new assigned Employee
+	                **/
+	                var msgTemplate = mailer.messageTemplate( {
+	                    first_name    : employee.first_name,
+	                    last_name     : employee.last_name,
+	                    asset_id      : req.params.id,
+	                    asset_name    : req.body.asset_name,
+	                    serial_number : req.body.serial_number
+	                }, 'assign' );
+	                var msgSubject = "AIS: New Assigned Item";
+	                var messageOptions = {
+	                    subject              : msgSubject,
+	                    generateTextFromHTML : true,
+	                    html                 : msgTemplate
+	                };
+
+	                mailer.sendOne( employee.email, messageOptions );
+
                     return res.end( JSON.stringify( err ) );
                 }
-                res.end( JSON.stringify( data ) );
+
             } );
 
         }

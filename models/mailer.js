@@ -1,6 +1,6 @@
 var nodemailer = require( 'nodemailer' );
 
-exports.messagePassword = function ( data, type ) {
+exports.messageTemplate = function ( data, type ) {
     // setup e-mail data
     var msgline = "<br/>--------------------------------------------------------------------<br/>";
     var msgGreetings = "Hi " + data.first_name + ' ' + data.last_name + ",<br/><br/>";

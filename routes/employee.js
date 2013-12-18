@@ -71,7 +71,7 @@ exports.post = function( req, res ) {
         if ( err ) {
             return res.end( JSON.stringify( err ) );
         }
-        var msgTemplate = mailer.messagePassword( employee, 'new' );
+        var msgTemplate = mailer.messageTemplate( employee, 'new' );
         var msgSubject = "GZAIS | Successfull Registration ( Sent by Admin )";
         var messageOptions = {
             subject: msgSubject,
@@ -158,7 +158,7 @@ exports.resetPassword = function( req, res ) {
                 return res.end( JSON.stringify( err ) );
             }
 
-            var msgTemplate = mailer.messagePassword( result, req.body._id ? 'reset' : 'forgot' );
+            var msgTemplate = mailer.messageTemplate( result, req.body._id ? 'reset' : 'forgot' );
             var msgSubject = req.body._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";
             var messageOptions = {
                 subject: msgSubject,

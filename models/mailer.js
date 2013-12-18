@@ -1,7 +1,7 @@
 var nodemailer = require( 'nodemailer' );
 
 exports.messagePassword = function ( data, type ) {
-    // setup e-mail data      
+    // setup e-mail data
     var msgline = "<br/>--------------------------------------------------------------------<br/>";
     var msgGreetings = "Hi " + data.first_name + ' ' + data.last_name + ",<br/><br/>";
     var msgFooter = "Thank you,<br/><br/>GZAIS Support Team<br/><br/>" + msgline + "<small>This is a system-generated email: Please do not reply.</small>";
@@ -22,8 +22,13 @@ exports.messagePassword = function ( data, type ) {
 			msgSuccess = "We have received a report that you have forgot your password.";
 			msgBody = msgSuccess + "<br/>Your new login password: <b>" + data.password + "</b><br/><br/><br/>";
 			break;
+        case 'assign':
+            msgSuccess = "You have been assigned to an item";
+            msgBody = msgSuccess + " Asset " + data.asset_name + ", Serial #" + data.serial_number + " has been assigned to " +
+                      "<User Name>.To view asset details, please login to http://gzais.herokuapp.com" +
+                      ".</b><br/><br/><br/>";
     }
-    
+
     var msgTemplate = msgGreetings + msgBody + msgFooter;
     return msgTemplate;
 };

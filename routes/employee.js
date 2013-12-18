@@ -32,8 +32,6 @@ exports.searchName = function( req, res ) {
             last_name  : new RegExp( '^' + searchItem, "i" )
         } ]
     }, function( err, data ) {
-        console.log( data );
-
         if ( err )
             return res.json( err );
         return res.json( data );

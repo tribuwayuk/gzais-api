@@ -6,7 +6,8 @@ var Employee    = mongoose.model( 'Employee' );
 
 exports.index = function( req, res ) {
 
-    var index 	  = { };
+    var index = { };
+
     index.name    = 'GZAIS API';
     index.version = '0.0.1';
 
@@ -72,11 +73,12 @@ exports.userLogin = function( req, res ) {
         // If log in fails, return a 403 status code and error message
         if ( !employee ) {
 
-            var message 	= { };
+            var message = { };
+
             message.error   = 'Access Denied';
             message.message = 'Wrong email or password. Please try again!';
-
             res.statusCode  = 403;
+
             return res.end( JSON.stringify( message ) );
 
         }

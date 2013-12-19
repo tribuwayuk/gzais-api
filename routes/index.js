@@ -6,7 +6,7 @@ var Employee    = mongoose.model( 'Employee' );
 
 exports.index = function( req, res ) {
 
-    var index 	  = {};
+    var index 	  = { };
     index.name    = 'GZAIS API';
     index.version = '0.0.1';
 
@@ -27,7 +27,7 @@ exports.accessControl = function( req, res, next ) {
     res.setHeader( 'Content-Type', 'application/json' );
 
     // Exclude /user-login routes from access_token required routes
-    if ( req.url.match( /user-login/ ) ) {
+    if ( req.url.match( /(user-login|reset-password)/ ) ) {
     	return next( );
     }
 
@@ -72,7 +72,7 @@ exports.userLogin = function( req, res ) {
         // If log in fails, return a 403 status code and error message
         if ( !employee ) {
 
-            var message 	= {};
+            var message 	= { };
             message.error   = 'Access Denied';
             message.message = 'Wrong email or password. Please try again!';
 

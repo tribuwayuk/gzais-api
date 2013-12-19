@@ -39,7 +39,7 @@ app.configure( 'development', function( ) {
 app.get( '/', routes.index );
 app.post( '/user-login', routes.userLogin );
 
-app.post( '/reset-password', employee.resetPassword );
+app.post( '/reset-password', routes.resetPassword );
 app.get( '/employees', employee.get );
 app.get( '/employees/search/', employee.searchName );
 app.get( '/employees/:id', employee.getId );

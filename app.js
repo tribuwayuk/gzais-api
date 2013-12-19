@@ -37,7 +37,7 @@ app.configure( 'development', function( ) {
 } );
 
 app.get( '/', routes.index );
-app.post( '/user-login', routes.login );
+app.post( '/user-login', routes.userLogin );
 
 app.post( '/reset-password', employee.resetPassword );
 app.get( '/employees', employee.get );

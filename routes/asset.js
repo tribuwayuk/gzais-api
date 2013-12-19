@@ -3,20 +3,33 @@
 var mongoose = require( 'mongoose' );
 var Asset    = mongoose.model( 'Asset' );
 var Employee = mongoose.model( 'Employee' );
+var AccessToken = mongoose.model( 'AccessToken' );
 var mailer   = require( '../models/mailer' );
-var _           = require( 'underscore' )._;
+var _        = require( 'underscore' )._;
+
+
 
 exports.get = function( req, res ) {
     var temp = '';
 
-    Asset.find( {} )
+    AccessToken.findOne( { access_token : req.query.access_token } )
         .populate( 'assignee' )
-        .exec( function( err, results ) {
-            if ( err ) {
-                return res.end( JSON.stringify( err ) );
+	.exec( function ( err, access_token ) {
+	    var query    = { };
+
+	    if ( access_token && access_token.employee.user_role === 'employee' ) {
+		query = { assignee : access_token.employee._id }
             }
 
-            res.end( JSON.stringify( results ) );
+	    Asset.find( query )
+		.populate( 'assignee' )
+		.exec( function( err, results ) {
+		    if ( err ) {
+			return res.end( JSON.stringify( err ) );
+		    }
+
+		    res.end( JSON.stringify( results ) );
+		} );
         } );
 
 };

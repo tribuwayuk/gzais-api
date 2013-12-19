@@ -24,8 +24,9 @@ exports.messageTemplate = function ( data, type ) {
 			break;
         case 'assign':
             msgSuccess = "You have been assigned to an item";
-            msgBody = msgSuccess + " Asset " + data.asset_name + ", Serial #" + data.serial_number + " has been assigned to " +
-                      "<User Name>.To view asset details, please login to http://gzais.herokuapp.com" +
+            msgBody = msgSuccess + " Asset " + data.asset_name + ", Serial #" + data.serial_number +
+                      ".To view asset details, please login to " +
+                      "<a href='http://gzais.herokuapp.com'>http://gzais.herokuapp.com</a>" +
                       ".</b><br/><br/><br/>";
     }
 

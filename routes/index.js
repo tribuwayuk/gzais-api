@@ -26,12 +26,35 @@ exports.accessControl = function( req, res, next ) {
 
     res.setHeader( 'Content-Type', 'application/json' );
 
-	if ( process.env.MONGOHQ_URL && !req.query.access_token ) {
+    // Exclude /user-login routes from access_token required routes
+    if ( req.url.match( /user-login/ ) ) {
+    	return next( );
+    }
+
+    // If no access_token
+	if ( !req.query.access_token ) {
 		res.statusCode = 403;
-		return res.end( '{ "error" : "Access Denied!", "error_message" : "Invalid/No Access Token" }' );
+		return res.end( '{ "error" : "access denied", "error_message" : "access token not found" }' );
 	}
 
-    next( );
+	// Check if access_token is valid
+	if ( req.query.access_token ) {
+
+		AccessToken.findOne( {
+		    access_token: req.query.access_token
+		}, function( err, access_token ) {
+
+			// If access_token is found, continue
+	        if ( access_token ) {
+	            return next( );
+	        }
+
+	        // Otherwise return 403
+	        res.statusCode = 403;
+	        res.end( '{ "error" : "access denied", "error_message" : "access token is invalid" }' );
+
+	    } );
+	}
 
 }
 

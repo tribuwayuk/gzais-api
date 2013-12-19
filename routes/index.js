@@ -4,6 +4,7 @@ var mongoose         = require( 'mongoose' );
 var AccessToken      = mongoose.model( 'AccessToken' );
 var Employee         = mongoose.model( 'Employee' );
 var generatePassword = require( 'randpass' );
+var mailer           = require( '../models/mailer' );
 
 exports.index = function( req, res ) {
 

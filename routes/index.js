@@ -1,8 +1,9 @@
 'use strict';
 
-var mongoose    = require( 'mongoose' );
-var AccessToken = mongoose.model( 'AccessToken' );
-var Employee    = mongoose.model( 'Employee' );
+var mongoose         = require( 'mongoose' );
+var AccessToken      = mongoose.model( 'AccessToken' );
+var Employee         = mongoose.model( 'Employee' );
+var generatePassword = require( 'randpass' );
 
 exports.index = function( req, res ) {
 
@@ -114,3 +115,52 @@ exports.userLogin = function( req, res ) {
 
     } );
 }
+
+exports.resetPassword = function( req, res ) {
+
+    // Generate Password
+    var newPassword = {
+		password: generatePassword( {
+            symbols: false
+        } )
+    };
+
+    Employee.findOne( req.body, function( err, result ) {
+
+        if ( err ) {
+            return res.end( JSON.stringify( err ) );
+        }
+
+        if ( !result ) {
+            var responseText = {};
+
+            responseText.error = 'not found';
+            if(req.body.password){
+				responseText.error_message = '_id or email does not exist';
+            } else {
+				responseText.error_message = 'password does not exist';
+            }
+
+            return res.end( JSON.stringify( responseText ) );
+        }
+
+        result.password = newPassword.password;
+        result.save( function( err ) {
+            if ( err ) {
+                return res.end( JSON.stringify( err ) );
+            }
+
+            var msgTemplate = mailer.messageTemplate( result, req.body._id ? 'reset' : 'forgot' );
+            var msgSubject = req.body._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";
+            var messageOptions = {
+                subject: msgSubject,
+                generateTextFromHTML: true,
+                html: msgTemplate
+            };
+
+            mailer.sendOne( result.email, messageOptions );
+            return res.end( '{ "ok" : "success" }' );
+        } );
+
+    } );
+};

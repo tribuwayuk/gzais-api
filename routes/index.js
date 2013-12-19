@@ -25,11 +25,17 @@ exports.accessControl = function( req, res, next ) {
     }
 
     res.setHeader( 'Content-Type', 'application/json' );
+
+	if ( process.env.MONGOHQ_URL && !req.query.access_token ) {
+		res.statusCode = 403;
+		return res.end( '{ "error" : "Access Denied!", "error_message" : "Invalid/No Access Token" }' );
+	}
+
     next( );
 
 }
 
-exports.login = function( req, res ) {
+exports.userLogin = function( req, res ) {
 
     Employee.findOne( {
         email    : req.body.email,

@@ -34,7 +34,7 @@ exports.accessControl = function( req, res, next ) {
     // If no access_token
 	if ( !req.query.access_token ) {
 		res.statusCode = 403;
-		return res.end( '{ "error" : "Access Denied!", "error_message" : "Invalid/No Access Token" }' );
+		return res.end( '{ "error" : "access denied", "error_message" : "access token not found" }' );
 	}
 
 	// Check if access_token is valid
@@ -44,13 +44,14 @@ exports.accessControl = function( req, res, next ) {
 		    access_token: req.query.access_token
 		}, function( err, access_token ) {
 
-			// If access_token is found
+			// If access_token is found, continue
 	        if ( access_token ) {
 	            return next( );
 	        }
 
-	        // Otherwise
-	        res.end( '{ "error" : "Access Denied!", "error_message" : "Access token is invalid or does not exist" }' );
+	        // Otherwise return 403
+	        res.statusCode = 403;
+	        res.end( '{ "error" : "access denied", "error_message" : "access token is invalid" }' );
 
 	    } );
 	}

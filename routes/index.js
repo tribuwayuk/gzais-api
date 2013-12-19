@@ -50,7 +50,7 @@ exports.accessControl = function( req, res, next ) {
 	        }
 
 	        // Otherwise
-	        res.end( '{ "error" : "Access Denied!", "error_message" : "Invalid/No Access Token" }' );
+	        res.end( '{ "error" : "Access Denied!", "error_message" : "Access token is invalid or does not exist" }' );
 
 	    } );
 	}

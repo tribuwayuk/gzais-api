@@ -111,15 +111,23 @@ exports.put = function(req, res) {
                         return res.end(JSON.stringify(err));
                     }
 
+                    var now = new Date()
+                    var month = now.getMonth() + 1;
+                    var day = now.getDate();
+                    var year = now.getFullYear();
+                    var customized_date = month + "/" + day + "/" + year;
+
                     /**
                      * Notify the new assigned Employee
                      **/
                     var msgTemplate = mailer.messageTemplate({
-                        first_name    : employee.first_name,
-                        last_name     : employee.last_name,
-                        asset_id      : req.params.id,
-                        asset_name    : req.body.asset_name,
-                        serial_number : req.body.serial_number
+                        first_name      : employee.first_name,
+                        last_name       : employee.last_name,
+                        asset_id        : req.params.id,
+                        asset_name      : req.body.asset_name,
+                        serial_number   : req.body.serial_number,
+                        admin_custodian : req.body.loggedin_user,
+                        date_changed    : customized_date
                     }, 'assign');
                     var msgSubject     = "AIS: New Assigned Item";
                     var messageOptions = {

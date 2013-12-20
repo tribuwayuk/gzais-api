@@ -125,6 +125,19 @@ exports.resetPassword = function( req, res ) {
         } )
     };
 
+    var data = {};
+    if ( req.body.oldPassword ) {
+    	data._id      = req.body._id;
+    	data.email    = req.body.email;
+    	data.password = req.body.oldPassword;
+    } else if ( req.body._id ) {
+    	data._id   = req.body._id;
+    } else if ( req.body.email ) {
+    	data.email = req.body.email;
+    } else {
+    	// data is null;
+    }
+
     Employee.findOne( req.body, function( err, result ) {
 
         if ( err ) {

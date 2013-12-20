@@ -28,9 +28,10 @@ exports.messageTemplate = function ( data, type ) {
 			break;
         case 'assign':
             msgSuccess = "You have been assigned to an item";
-            msgBody = msgSuccess + " Asset " + data.asset_name + ", Serial #" + data.serial_number + " has been assigned to " +
-                      "<User Name>.To view asset details, please login to http://gzais.herokuapp.com" +
-                      ".</b><br/><br/><br/>";
+            msgBody = msgSuccess + " Asset " + data.asset_name + ", Serial #" + data.serial_number +
+                      "To view asset details, please login to http://gzais.herokuapp.com" + "." +
+                      "</b><br/>" + "Admin/Custodian: " + data.admin_custodian + "<br/>" +
+                      "Date Changed: " + data.date_changed + "<br/><br/><br/><br/>";
     }
 
     var msgTemplate = msgGreetings + msgBody + msgFooter;

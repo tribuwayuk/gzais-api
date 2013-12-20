@@ -4,12 +4,11 @@ var mongoose         = require( 'mongoose' );
 var AccessToken      = mongoose.model( 'AccessToken' );
 var Employee         = mongoose.model( 'Employee' );
 var generatePassword = require( 'randpass' );
-var mailer           = require( '../models/mailer' );
+var mailer           = require( '../models/mailer');
 
 exports.index = function( req, res ) {
 
     var index = { };
-
     index.name    = 'GZAIS API';
     index.version = '0.0.1';
 
@@ -31,7 +30,7 @@ exports.accessControl = function( req, res, next ) {
 
     // Exclude /user-login routes from access_token required routes
     if ( req.url.match( /(user-login|reset-password)/ ) ) {
-    	return next( );
+		return next( );
     }
 
     // If no access_token
@@ -44,22 +43,22 @@ exports.accessControl = function( req, res, next ) {
 	if ( req.query.access_token ) {
 
 		AccessToken.findOne( {
-		    access_token: req.query.access_token
+			access_token: req.query.access_token
 		}, function( err, access_token ) {
 
 			// If access_token is found, continue
-	        if ( access_token ) {
-	            return next( );
-	        }
+			if ( access_token ) {
+				return next( );
+			}
 
-	        // Otherwise return 403
-	        res.statusCode = 403;
-	        res.end( '{ "error" : "access denied", "error_message" : "access token is invalid" }' );
+			// Otherwise return 403
+			res.statusCode = 403;
+			res.end( '{ "error" : "access denied", "error_message" : "access token is invalid" }' );
 
-	    } );
+		} );
 	}
 
-}
+};
 
 exports.userLogin = function( req, res ) {
 
@@ -115,7 +114,7 @@ exports.userLogin = function( req, res ) {
 
 
     } );
-}
+};
 
 exports.resetPassword = function( req, res ) {
 
@@ -137,22 +136,31 @@ exports.resetPassword = function( req, res ) {
 
             responseText.error = 'not found';
             if(req.body.password){
-				responseText.error_message = '_id or email does not exist';
-            } else {
 				responseText.error_message = 'password does not exist';
+            } else {
+				responseText.error_message = '_id or email does not exist';
             }
 
             return res.end( JSON.stringify( responseText ) );
         }
-
-        result.password = newPassword.password;
+        if(req.body.password){
+			result.password = req.body.password;
+        } else {
+			result.password = newPassword.password;
+        }
         result.save( function( err ) {
             if ( err ) {
                 return res.end( JSON.stringify( err ) );
             }
 
             var msgTemplate = mailer.messageTemplate( result, req.body._id ? 'reset' : 'forgot' );
-            var msgSubject = req.body._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";
+            var msgSubject  = req.body._id ? "GZAIS | Request to Reset Password ( Reset by Admin )" : "GZAIS | Request to Reset Password ( Forgot Password )";
+
+			if (req.body.password) {
+				msgTemplate = mailer.messageTemplate( result, 'change');
+				msgSubject  = 'GZAIS | Request to Change Password';
+			}
+
             var messageOptions = {
                 subject: msgSubject,
                 generateTextFromHTML: true,

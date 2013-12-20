@@ -22,6 +22,10 @@ exports.messageTemplate = function ( data, type ) {
 			msgSuccess = "We have received a report that you have forgot your password.";
 			msgBody = msgSuccess + "<br/>Your new login password: <b>" + data.password + "</b><br/><br/><br/>";
 			break;
+		case 'change':
+			msgSuccess = "We have received a report that you change your password.";
+			msgBody = msgSuccess + "<br/>Your new login password: <b>" + data.password + "</b><br/><br/><br/>";
+			break;
         case 'assign':
             msgSuccess = "You have been assigned to an item";
             msgBody = msgSuccess + " Asset " + data.asset_name + ", Serial #" + data.serial_number + " has been assigned to " +

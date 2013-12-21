@@ -138,7 +138,8 @@ exports.resetPassword = function( req, res ) {
     	// data is null;
     }
 
-    Employee.findOne( req.body, function( err, result ) {
+
+    Employee.findOne( data, function( err, result ) {
 
         if ( err ) {
             return res.end( JSON.stringify( err ) );
@@ -149,7 +150,7 @@ exports.resetPassword = function( req, res ) {
 
             responseText.error = 'not found';
             if(req.body.password){
-				responseText.error_message = 'password does not exist';
+				responseText.error_message = 'password does not exist' + result;
             } else {
 				responseText.error_message = '_id or email does not exist';
             }

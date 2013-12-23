@@ -150,7 +150,7 @@ exports.resetPassword = function( req, res ) {
 
             responseText.error = 'not found';
             if(req.body.password){
-				responseText.error_message = 'password does not exist' + result;
+				responseText.error_message = 'password does not exist';
             } else {
 				responseText.error_message = '_id or email does not exist';
             }
